@@ -1,31 +1,10 @@
 package com.sirolf2009.xstream
 
-import java.util.concurrent.Executors
+import com.sirolf2009.xstream.ParallelExecutors.Operation
 import java.util.concurrent.ExecutorService
 import java.util.stream.Stream
 
 class ParallelExecutors {
-
-	static val executor = Executors.newFixedThreadPool(100)
-
-	def static void main(String[] args) {
-		val now = System.currentTimeMillis()
-		val parallelyExecuted = executor 
-		    || ([Thread.sleep(1000) return 42] 
-			|| [Thread.sleep(1000) return 24] 
-			|| [Thread.sleep(2000) return 24] 
-			|| [Thread.sleep(2000) return 22] 
-			|| [Thread.sleep(1000) return 22] 
-			|| [Thread.sleep(1000) return 22] 
-			|| [Thread.sleep(2000) return 24] 
-			|| [Thread.sleep(2000) return 24] 
-			|| [Thread.sleep(1000) return 22] 
-			|| [Thread.sleep(1000) return 22] 
-			|| [Thread.sleep(2000) return 22]
-			|| [Thread.sleep(2000) return 22])
-		println("Sum: "+parallelyExecuted.mapToInt[it].sum())
-		println("Time: "+(System.currentTimeMillis() - now))
-	}
 
 	def static <T> ||(ExecutorService executor, Operation<T> he) {
 		he.call(executor).get()

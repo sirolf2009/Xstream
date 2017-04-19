@@ -83,6 +83,10 @@ class ParallelStreams {
 	def static <T> Optional<T> =>(Stream<T> stream, BinaryOperator<T> reducer) {
 		return stream.reduce(reducer)
 	}
+
+	def static <T> Optional<T> =>(Collection<T> list, BinaryOperator<T> reducer) {
+		return list.stream.reduce(reducer)
+	}
 	
 	def static <T, R> Map<R, List<T>> <=>(Collection<T> list, (T)=>R grouper) {
 		return list.stream <=> grouper
@@ -94,6 +98,10 @@ class ParallelStreams {
 
 	def static <T> ?:(Stream<T> stream, (T)=>void forEacher) {
 		stream.forEach(forEacher)
+	}
+
+	def static <T> ?:(Collection<T> list, (T)=>void forEacher) {
+		list.stream.forEach(forEacher)
 	}
 
 	def static <T> Stream<T> --(Stream<Stream<T>> stream) {
