@@ -10,56 +10,6 @@ import java.util.stream.Stream
 
 class ParallelStreams {
 
-	/**
-	 * Operator meanings:
-	 * 
-	 * >> stream and map
-	 * >>> parallel stream and map
-	 * -> map
-	 * <> filter
-	 * ?: forEach
-	 * => reduce
-	 * <=> group
-	 * ++ collect to list
-	 * -- flatten
-	 */
-	def static void main(String[] args) {
-		val list = #[1, 2, 3, 4, 5, 6, 7, 8, 9]
-		
-		println("Random calculation:")
-		list >> [it + 1] <> [it < 10] -> [it * 2] ?: [
-			println(it)
-		]
-		println()
-		
-		println("Parallel random calculation")
-		println((list >>> [it + 1] <> [it < 10] -> [it * 2] => [a,b| a+b]).get())
-		println()
-		
-		println("Even Numbers:")
-		list <> [it % 2 == 0] -> ['''The number «it» is even'''] ?: [
-			println(it)
-		]
-		println()
-		
-		println("All numbers")
-		val map = list <=> [it % 2 == 0]
-		val strings = (map.entrySet >> [
-			if(key) {
-				return value >> ['''The number «it» is even''']
-			} else {
-				return value >> ['''The number «it» is odd''']
-			}
-		]) --
-		strings.sorted ?: [
-			println(it)
-		]
-		println()
-		
-		println("Negative numbers")
-		println((list >> [it*-1]) ++)
-	}
-
 	def static <T, R> Stream<R> >>(Collection<T> list, (T)=>R mapper) {
 		return list.stream().map(mapper)
 	}
