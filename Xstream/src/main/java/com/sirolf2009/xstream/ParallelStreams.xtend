@@ -55,11 +55,11 @@ class ParallelStreams {
 	}
 
 	def static <T> Stream<T> --(Stream<Stream<T>> stream) {
-		stream.flatMap[it]
+		return stream.flatMap[it]
 	}
 
 	def static <T> List<T> ++(Stream<T> stream) {
-		stream.collect(Collectors.toList)
+		return stream.collect(Collectors.toList)
 	}
 
 }
