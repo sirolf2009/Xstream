@@ -5,13 +5,14 @@ import junit.framework.Assert
 import org.junit.Test
 
 import static extension com.sirolf2009.xstream.ParallelExecutors.*
+import java.util.concurrent.atomic.AtomicInteger
 
 class ParallelExecutorsTest {
 	
 	static val executor = Executors.newFixedThreadPool(100)
 	
 	@Test
-	def void test() {
+	def void testProducer() {
 		val now = System.currentTimeMillis()
 		val parallelyExecuted = executor 
 		    || ([Thread.sleep(1000) return 1] 
@@ -28,6 +29,28 @@ class ParallelExecutorsTest {
 			|| [Thread.sleep(2000) return 12])
 		
 		Assert.assertEquals(78, parallelyExecuted.mapToInt[it].sum())
+		Assert.assertTrue((System.currentTimeMillis() - now) > 1999)
+		Assert.assertTrue((System.currentTimeMillis() - now) < 2999)
+	}
+	
+	@Test
+	def void testConsumer() {
+		val now = System.currentTimeMillis()
+		val counter = new AtomicInteger()
+		executor 
+		    || ([Thread.sleep(1000) counter.incrementAndGet()] 
+			|| [Thread.sleep(1000) counter.incrementAndGet()] 
+			|| [Thread.sleep(2000) counter.incrementAndGet()] 
+			|| [Thread.sleep(2000) counter.incrementAndGet()] 
+			|| [Thread.sleep(1000) counter.incrementAndGet()] 
+			|| [Thread.sleep(1000) counter.incrementAndGet()] 
+			|| [Thread.sleep(2000) counter.incrementAndGet()] 
+			|| [Thread.sleep(2000) counter.incrementAndGet()] 
+			|| [Thread.sleep(1000) counter.incrementAndGet()] 
+			|| [Thread.sleep(1000) counter.incrementAndGet()] 
+			|| [Thread.sleep(2000) counter.incrementAndGet()]
+			|| [Thread.sleep(2000) counter.incrementAndGet()])
+		Assert.assertEquals(12, counter.get())
 		Assert.assertTrue((System.currentTimeMillis() - now) > 1999)
 		Assert.assertTrue((System.currentTimeMillis() - now) < 2999)
 	}

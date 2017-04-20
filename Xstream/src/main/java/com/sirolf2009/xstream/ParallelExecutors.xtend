@@ -14,8 +14,20 @@ class ParallelExecutors {
 		operator_or(me as Operation<T>, he as Operation<T>)
 	}
 
-	def static <T> Operation<T> +((Object)=>T me) {
-		return me as Operation<T>
+	def static ||((Object)=>void me, (Object)=>void he) {
+		val Operation<Void> opMe = new Operation<Void> {
+			override compute() {
+				me.apply(null)
+				return null
+			}
+		}
+		val Operation<Void> opHe = new Operation<Void> {
+			override compute() {
+				he.apply(null)
+				return null
+			}
+		}
+		return operator_or(opMe, opHe)
 	}
 
 	def static <T> ||(Operation<T> me, Operation<T> he) {
