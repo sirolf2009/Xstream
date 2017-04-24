@@ -41,7 +41,7 @@ class ParallelExecutors {
 			}
 
 			override compute() {
-				throw new UnsupportedOperationException("TODO: auto-generated method stub")
+				throw new UnsupportedOperationException("Call get(ExecutorService) instead")
 			}
 		}
 	}
