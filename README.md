@@ -53,6 +53,12 @@ println("Negative numbers")
 println((list >> [it*-1]) ++)
 ```
 
+This also works for spark RDD's, but you'll have to import 
+```xtend
+import static extension com.sirolf2009.xstream.ParallelSpark.* 
+```
+instead
+
 ## Executors
 ```xtend
 import static extension com.sirolf2009.xstream.ParallelExecutors.*
